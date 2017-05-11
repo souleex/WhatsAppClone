@@ -2,7 +2,7 @@
   "name": "Ionic2-MeteorCLI-WhatsApp",
   "private": true,
   "scripts": {
-    "start": "meteor run"
+    "start": "meteor run --settings private/settings.json"
   },
   "dependencies": {
     "@angular/common": "2.2.1",
@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "@types/meteor": "^1.3.31",
+    "@types/meteor-accounts-phone": "0.0.5",
     "@types/underscore": "^1.7.36",
     "meteor-typings": "^1.3.1"
   }
