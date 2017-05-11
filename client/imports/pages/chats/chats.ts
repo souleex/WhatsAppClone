@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import * as Moment from 'moment';
+import { Chats, Messages } from '../../../../imports/collections';
+
 
 import { Observable } from 'rxjs';
 import { Chat, MessageType } from '../../../../imports/models';
@@ -13,7 +15,9 @@ import template from './chats.html';
   template
 
 })
+export class ChatsPage implements OnInit {
 
+  chats;
 export class ChatsPage {
 
   chats: Observable<Chat[]>;
@@ -25,7 +29,39 @@ export class ChatsPage {
     this.chats = this.findChats();
 
   }
+  ngOnInit() {
 
+    this.chats = Chats
+
+      .find({})
+
+      .mergeMap((chats: Chat[]) =>
+
+        Observable.combineLatest(
+
+          ...chats.map((chat: Chat) =>
+
+            Messages
+
+              .find({chatId: chat._id})
+
+              .startWith(null)
+
+              .map(messages => {
+
+                if (messages) chat.lastMessage = messages[0];
+
+                return chat;
+
+              })
+
+          )
+
+        )
+
+      ).zone();
+
+  }
  
 
   private findChats(): Observable<any[]> {
@@ -139,7 +175,7 @@ export class ChatsPage {
   }
   removeChat(chat: Chat): void {
 
-    this.chats = this.chats.map<Chat[]>(chatsArray => {
+       this.chats = this.chats.map(chatsArray => {
 
       const chatIndex = chatsArray.indexOf(chat);
 
@@ -152,4 +188,11 @@ export class ChatsPage {
     });
 
   }
+    removeChat(chat: Chat): void {
+
+    Chats.remove({_id: chat._id}).subscribe(() => {});
+
+  }
+
+}
 }
