@@ -1,4 +1,5 @@
 import { Meteor } from 'meteor/meteor';
+
 export const DEFAULT_PICTURE_URL = '/assets/default-profile-pic.svg';
 
 export interface Profile {
@@ -29,7 +30,5 @@ export interface Message {
 }
 
 export interface User extends Meteor.User {
-
   profile?: Profile;
-
 }
